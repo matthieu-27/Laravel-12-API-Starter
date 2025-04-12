@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
@@ -25,7 +26,6 @@ class Order extends Model
         'name',
         'adress',
         'country',
-        'status',
         'tracking_number',
         'tracking_url'
     ];
@@ -56,22 +56,22 @@ class Order extends Model
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'date' => 'date',
-            'price' => 'decimal:2',
-            'total' => 'decimal:2',
-            'quantity' => 'integer',
-            'tracking_number' => 'string',
-            'tracking_url' => 'string',
-            'name' => 'string',
-            'adress' => 'string',
-            'country' => 'string',
-            'gencode' => 'string',
-            'product_id' => 'integer',
-        ];
-    }
+    protected $casts = [
+        'status' => OrderStatus::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'date' => 'date',
+        'price' => 'decimal:2',
+        'total' => 'decimal:2',
+        'quantity' => 'integer',
+        'tracking_number' => 'string',
+        'tracking_url' => 'string',
+        'name' => 'string',
+        'adress' => 'string',
+        'country' => 'string',
+        'gencode' => 'string',
+        'product_id' => 'integer',
+    ];
 
     // Relationship with User
     public function user()

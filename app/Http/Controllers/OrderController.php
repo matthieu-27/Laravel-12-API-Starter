@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -44,5 +46,18 @@ class OrderController extends Controller
             $order = $user->orders()->create($request->all());
             return response()->json($order, 201);
         }
+    }
+
+    public function updateStatus(Request $request, $orderId)
+    {
+        $request->validate([
+            'status' => ['required', 'string', 'in:' . implode(',', OrderStatus::values())],
+        ]);
+
+        $order = Order::findOrFail($orderId);
+        $order->status = OrderStatus::from($request->status);
+        $order->save();
+
+        return response()->json(['message' => 'Order status updated successfully']);
     }
 }
